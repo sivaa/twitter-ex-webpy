@@ -1,0 +1,12 @@
+$def with (tweets)
+
+$if len(tweets) == 0:
+	No Tweets Found. You can post a <a href='/new'>new</a> one now.
+$else:
+	<table border="1"> <tr> <th> Tweet </th> <th> Tweeted At</th>
+	$for tweet in tweets:
+		<tr> 
+			<td>$tweet.text </td> 
+			<td>$tweet.created_at </td>
+		</tr>
+	</table>
