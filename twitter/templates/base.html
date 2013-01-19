@@ -1,8 +1,17 @@
-$def with (page)
+$def with (page, session)
 <html>
 <head>
 <title> Welcome to Twitter ! </title>
 <body>
-	$:page
+<a href="/"> Home </a>
+$if 'username' in session:
+	Welcome $session.username 
+	<a href="/logout"> (logout) </a> 
+	<a href="/user/$session.username"> My Tweets </a>
+$else:
+	Welcome Guest! 	<a href="/login"> (login) </a>
+
+$:page
+
 </body>
 </html>

@@ -1,12 +1,41 @@
-$def with (tweets)
+$def with (tweets, followers, following_list, following_suggestion_list)
 
 $if len(tweets) == 0:
 	No Tweets Found. You can post a <a href='/new'>new</a> one now.
 $else:
-	<table border="1"> <tr> <th> Tweet </th> <th> Tweeted At</th>
+	<table border="1"> <tr> <th> Tweet </th> <th> Tweeted By</th> <th> Tweeted At</th> </tr>
 	$for tweet in tweets:
 		<tr> 
-			<td>$tweet.text </td> 
+			<td>$tweet.text </td>
+			<td><a href="/user/$tweet.username"> $tweet.username </a></td> 
 			<td>$tweet.created_at </td>
 		</tr>
 	</table>
+Post your <a href='/new'>tweet</a>  now.
+
+$if followers:
+	<table border="1"> <tr> <th> Your Followers </th> </tr>
+	$for follower in followers:
+		<tr> 
+			<td><a href="/user/$follower.followed_by">$follower.followed_by</a></td>
+		</tr>
+	</table>
+
+$if following_list:
+	<table border="1"> <tr> <th> You are Following </th> </tr>
+	$for following in following_list:
+		<tr> 
+			<td><a href="/user/$following.followed_user">$following.followed_user</a></td>
+		</tr>
+	</table>
+
+
+$if following_suggestion_list:
+	<table border="1"> <tr> <th> Your can also Follow </th> </tr>
+	$for following_suggestion in following_suggestion_list:
+		<tr> 
+			<td><a href="/follow/$following_suggestion">$following_suggestion</a></td>
+		</tr>
+	</table>
+
+
