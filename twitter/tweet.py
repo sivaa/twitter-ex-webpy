@@ -1,11 +1,17 @@
 import web
+import main
 
 render = web.template.render('templates/')
 db = web.database(dbn = 'mysql', user = 'root', pw='root', db = 'twitter')
 
 class new:
 	def GET(self):
-		return render.base(render.new())
+		session = main.get_session()
+		if 'username' in session:
+			return render.base(render.new())
+		else:
+			return render.base(render.login())
+		
 
 	def POST(self):
 		i = web.input()
@@ -13,6 +19,6 @@ class new:
 		raise web.seeother('/')
 
 class list:
-	def GET(self):
+	def GET(self):		
 		tweets = db.select('tweet')
 		return render.base(render.home(tweets))
