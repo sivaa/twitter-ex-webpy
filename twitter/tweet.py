@@ -23,9 +23,18 @@ class follow:
 		raise web.seeother('/')
 
 class list:
-	def GET(self):		
-		tweets = db.select('tweet')		
-		return render.base(render.home(tweets, get_followers(session), get_following(session), follow_suggestions(session)), session)
+		def GET(self):	
+			if 'username' in session:		
+				follows = db.query("SELECT * from follower WHERE followed_by = $u", {'u' : session.username})
+				flist = []
+				for f in follows :
+					flist.append(f.followed_user)
+				flist_str = "','".join(flist)
+				flist_str = "'" + flist_str + "'"
+				tweets = db.query("SELECT * FROM tweet WHERE username IN (" + flist_str + ")")
+			else :
+				tweets = db.select('tweet')		
+			return render.base(render.home(tweets, get_followers(session), get_following(session), follow_suggestions(session)), session)
 
 class user_list:
 	def GET(self, username):
@@ -59,7 +68,6 @@ def follow_suggestions(session):
 		for following in following_obj_list:
 			following_list.append(following.followed_user)
 		following_list_str =  "','".join(following_list)
-		print repr(following_list_str)
 		following_list_str = "'" +  following_list_str + "'"
 		following_suggestion_obj_list = db.query("SELECT * FROM auth WHERE username NOT IN (" + following_list_str + ")")
 
